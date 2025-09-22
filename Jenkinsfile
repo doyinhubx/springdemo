@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = tool name: 'JDK 21', type: 'jdk'
+        // Use the system Java installation instead of Jenkins tool
+        JAVA_HOME = '/usr/lib/jvm/java-21'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
 
     stages {
         stage('Build') {
             steps {
+                sh 'java -version'
                 sh './mvnw clean package -DskipTests'
             }
         }
@@ -19,4 +21,3 @@ pipeline {
         failure { echo 'Build failed.' }
     }
 }
-
