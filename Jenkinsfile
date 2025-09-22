@@ -1,27 +1,23 @@
 pipeline {
     agent any
 
+    environment {
+        JAVA_HOME = '/opt/java/openjdk'  # This is the correct path
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+    }
+
     stages {
-        stage('Debug') {
+        stage('Build') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
-                sh 'which java'
                 sh 'java -version'
-                sh 'echo "JAVA_HOME: $JAVA_HOME"'
-                sh 'echo "PATH: $PATH"'
-                script {
-                    // Try different Java paths
-                    def possiblePaths = [
-                        '/opt/java/jdk-21',
-                        '/usr/lib/jvm/java-21', 
-                        '/usr/lib/jvm/default-java'
-                    ]
-                    possiblePaths.each { path ->
-                        sh "if [ -d '$path' ]; then echo 'Found Java at: $path'; fi"
-                    }
-                }
+                sh 'chmod +x ./mvnw'
+                sh './mvnw clean package -DskipTests'
             }
         }
+    }
+
+    post {
+        success { echo 'Build succeeded!' }
+        failure { echo 'Build failed.' }
     }
 }
