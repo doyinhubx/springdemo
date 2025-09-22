@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = '/opt/java/openjdk'  # This is the correct path
+        JAVA_HOME = '/opt/java/openjdk'  // This is the correct path
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
 
